@@ -59,10 +59,12 @@ create() {
   echo "Start creating the cluster ${K8S_CLUSTER_NAME} based on ${TEMPLATE} template"
   echo "************************************************************************************"
 
-  downloadKeys
-
   kops create -f config/${TEMPLATE}.yml
-  #Use for adding ssh key to all cluster's instnaces
+  # Use for adding ssh key to all cluster's instnaces
+  if [ ! -f ~/.ssh/kops.pub ]; then
+    ssh-keygen -t rsa -b 4096 -f ~/.ssh/kops -q -P ""
+  fi
+  downloadKeys
   kops create secret --name ${K8S_CLUSTER_NAME} sshpublickey admin -i ~/.ssh/kops.pub
   kops update cluster ${K8S_CLUSTER_NAME} --yes
 
@@ -71,8 +73,9 @@ create() {
     OUTPUT=`curl -s --insecure https://api.${K8S_CLUSTER_NAME}`
     if [ "$OUTPUT" == "Unauthorized" ]
     then
-      installServices
+      # installServices
       buildDashboard
+      kops export kubecfg --name=$K8S_CLUSTER_NAME --state=$KOPS_STATE_STORE
     else
       echo "Cluster is not ready yet" && sleep 45
     fi
