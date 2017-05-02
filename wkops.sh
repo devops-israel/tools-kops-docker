@@ -75,7 +75,6 @@ create() {
     then
       # installServices
       buildDashboard
-      kops export kubecfg --name=$K8S_CLUSTER_NAME --state=$KOPS_STATE_STORE
     else
       echo "Cluster is not ready yet" && sleep 45
     fi
