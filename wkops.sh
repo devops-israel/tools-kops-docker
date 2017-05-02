@@ -7,7 +7,7 @@ list() {
   then
     echo "No clusters are existing"
   else
-    printf "These are the existing clusters:\n`aws s3 ls ${KOPS_STATE_STORE}| grep k8s |awk '{print $2}' | tr -d '/'`\n"
+    printf "These are the existing clusters:\n`aws s3 ls ${KOPS_STATE_STORE} | grep k8s | awk '{print $2}' | tr -d '/'`\n"
   fi
 }
 
