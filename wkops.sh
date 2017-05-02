@@ -19,7 +19,7 @@ downloadKeys() {
 installServices() {
   if [ "$(ls services)" ]
   then
-    kubectl apply -f services/ > /dev/null
+    kubectl apply -R -f services/ > /dev/null
   fi
 }
 
