@@ -23,12 +23,27 @@ installServices() {
   fi
 }
 
+installIngresses() {
+  if [ "$(ls ingresses)" ]
+  then
+    kubectl apply -R -f ingresses/ > /dev/null
+  fi
+}
+
 removeServices() {
   if [ "$(ls services)" ]
   then
     kubectl delete -f services/ > /dev/null
   fi
 }
+
+removeIngresses() {
+  if [ "$(ls ingresses)" ]
+  then
+    kubectl delete -R -f ingresses/ > /dev/null
+  fi
+}
+
 
 buildDashboard() {
   kubectl create -f https://raw.githubusercontent.com/kubernetes/kops/master/addons/kubernetes-dashboard/v$DASHBOARD_VERSION.yaml
@@ -75,6 +90,8 @@ create() {
     if [ "$OUTPUT" == "Unauthorized" ]
     then
       kubectl create -f https://git.io/weave-kube
+      installIngresses
+      sleep 2m
       installServices
       buildMonitoring
       buildDashboard
