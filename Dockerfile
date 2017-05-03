@@ -39,6 +39,6 @@ RUN apk add --update --no-cache python \
     && rm -r /root/.cache
 
 WORKDIR /opt
-COPY wkops.sh /opt/wkops.sh
+COPY wkops.sh /usr/bin/wkops
 
 CMD ["bash"]
