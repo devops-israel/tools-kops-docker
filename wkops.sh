@@ -74,7 +74,9 @@ create() {
     if [ "$OUTPUT" == "Unauthorized" ]
     then
       # installServices
+      kubectl create -f https://git.io/weave-kube
       buildDashboard
+      helm init --kube-context $K8S_CLUSTER_NAME
     else
       echo "Cluster is not ready yet" && sleep 45
     fi
