@@ -31,10 +31,11 @@ removeServices() {
 }
 
 buildDashboard() {
-  #install dashboard
-  kubectl create -f https://raw.githubusercontent.com/kubernetes/kops/master/addons/kubernetes-dashboard/v$DASHBOARD_VERSION.yaml > /dev/null && sleep 60
-  #install basic monitoring
-  kubectl create -f https://raw.githubusercontent.com/kubernetes/kops/master/addons/monitoring-standalone/v$MONITORING_VERSION.yaml > /dev/null
+  kubectl create -f https://raw.githubusercontent.com/kubernetes/kops/master/addons/kubernetes-dashboard/v$DASHBOARD_VERSION.yaml
+
+  #save dashboard password to cluster folder in S3
+  kops get secrets kube --type secret -oplaintext &> /dev/null > $K8S_CLUSTER_NAME.pass
+  aws s3 cp $K8S_CLUSTER_NAME.pass $KOPS_STATE_STORE/dashboards-password/$K8S_CLUSTER_NAME.pass > /dev/null 2>&1
   echo
   echo "Cluster is ready"
   echo
@@ -43,13 +44,13 @@ buildDashboard() {
   echo "- The password for the dashboard is: `kops get secrets kube --type secret -oplaintext 2>/dev/null`"
   echo "- For future use, the password for the dashboard can be found here: $KOPS_STATE_STORE/dashboards-password/$K8S_CLUSTER_NAME.pass"
   echo "- To connect the envirument using kubectl run the following command: kops export kubecfg --name=${K8S_CLUSTER_NAME} --state=${KOPS_STATE_STORE}"
-  #save dashboard password to cluster folder in S3
-  kops get secrets kube --type secret -oplaintext &> /dev/null > $K8S_CLUSTER_NAME.pass
-  aws s3 cp $K8S_CLUSTER_NAME.pass $KOPS_STATE_STORE/dashboards-password/$K8S_CLUSTER_NAME.pass > /dev/null 2>&1
+}
+
+buildMonitoring() {
+  kubectl create -f https://raw.githubusercontent.com/kubernetes/kops/master/addons/monitoring-standalone/v$MONITORING_VERSION.yaml
 }
 
 create() {
-
   if [ -z "${TEMPLATE}" ]
   then
     export TEMPLATE="default"
@@ -73,8 +74,9 @@ create() {
     OUTPUT=`curl -s --insecure https://api.${K8S_CLUSTER_NAME}`
     if [ "$OUTPUT" == "Unauthorized" ]
     then
-      # installServices
       kubectl create -f https://git.io/weave-kube
+      installServices
+      buildMonitoring
       buildDashboard
       helm init --kube-context $K8S_CLUSTER_NAME
     else
@@ -93,8 +95,8 @@ teardown() {
 }
 
 #addons versions
-export DASHBOARD_VERSION=1.5.0
-export MONITORING_VERSION=1.2.0
+export DASHBOARD_VERSION=1.6.0
+export MONITORING_VERSION=1.3.0
 
 #FIRST: check sanity
 kops version >/dev/null || fatal 'The `kops` CLI tool is not available.'
