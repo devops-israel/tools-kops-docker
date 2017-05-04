@@ -30,6 +30,13 @@ installIngresses() {
   fi
 }
 
+installSecrets() {
+  if [ "$(ls secrets)" ]
+  then
+    kubectl apply -R -f secrets/ > /dev/null
+  fi
+}
+
 removeServices() {
   if [ "$(ls services)" ]
   then
@@ -41,6 +48,13 @@ removeIngresses() {
   if [ "$(ls ingresses)" ]
   then
     kubectl delete -R -f ingresses/ > /dev/null
+  fi
+}
+
+removeSecrets() {
+  if [ "$(ls secrets)" ]
+  then
+    kubectl delete -R -f secrets/ > /dev/null
   fi
 }
 
@@ -90,8 +104,9 @@ create() {
     if [ "$OUTPUT" == "Unauthorized" ]
     then
       kubectl create -f https://git.io/weave-kube
+      installSecrets
       installIngresses
-      sleep 2m
+      sleep 3m
       installServices
       buildMonitoring
       buildDashboard
