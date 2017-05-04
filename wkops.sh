@@ -103,7 +103,6 @@ create() {
     OUTPUT=`curl -s --insecure https://api.${K8S_CLUSTER_NAME}`
     if [ "$OUTPUT" == "Unauthorized" ]
     then
-      kubectl create -f https://git.io/weave-kube
       installSecrets
       installIngresses
       sleep 3m
