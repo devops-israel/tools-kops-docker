@@ -58,7 +58,6 @@ removeSecrets() {
   fi
 }
 
-
 buildDashboard() {
   kubectl create -f https://raw.githubusercontent.com/kubernetes/kops/master/addons/kubernetes-dashboard/v$DASHBOARD_VERSION.yaml
 
@@ -77,6 +76,10 @@ buildDashboard() {
 
 buildMonitoring() {
   kubectl create -f https://raw.githubusercontent.com/kubernetes/kops/master/addons/monitoring-standalone/v$MONITORING_VERSION.yaml
+}
+
+exportCfg() {
+  kops export kubecfg --name=$K8S_CLUSTER_NAME
 }
 
 create() {
@@ -140,7 +143,13 @@ case "$1" in
   list)   list ;;
   downloadKeys)   downloadKeys ;;
   removeServices)   removeServices ;;
-  *) echo -e "usage: $0 create | teardown | list | downloadKeys | removeServices" >&2
+  removeIngresses)   removeIngresses ;;
+  removeSecrets)   removeSecrets ;;
+  installServices)   installServices ;;
+  installIngresses)   installIngresses ;;
+  installSecrets)   installSecrets ;;
+  export)   exportCfg ;;
+  *) echo -e "usage: $0 create | teardown | list | downloadKeys | removeServices | removeIngresses | removeSecrets | installServices | installIngresses | installSecrets | export" >&2
       exit 1
       ;;
 esac
