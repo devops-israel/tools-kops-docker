@@ -16,6 +16,10 @@ downloadKeys() {
   chmod -R 600 ~/.ssh/ > /dev/null 2>&1
 }
 
+downloadPass() {
+  aws s3 sync ${KOPS_STATE_STORE}/dashboards-password/$K8S_CLUSTER_NAME.pass ./ > /dev/null 2>&1
+}
+
 installServices() {
   if [ "$(ls services)" ]
   then

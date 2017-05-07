@@ -11,6 +11,7 @@ RUN apk add --update \
     jq \
     vim \
     tar \
+    sed \
     bash \
     bash-doc \
     bash-completion \
@@ -37,6 +38,9 @@ RUN apk add --update --no-cache python \
     && pip install --upgrade pip setuptools \
     awscli --ignore-installed \
     && rm -r /root/.cache
+
+RUN curl -s -L -o /usr/bin/templater https://raw.githubusercontent.com/johanhaleby/bash-templater/master/templater.sh \
+    && chmod +x /usr/bin/templater
 
 WORKDIR /opt
 COPY wkops.sh /usr/bin/wkops
