@@ -16,6 +16,11 @@ downloadKeys() {
   chmod -R 600 ~/.ssh/ > /dev/null 2>&1
 }
 
+uploadKeys() {
+  aws s3 sync ~/.ssh/ ${KOPS_STATE_STORE}/ssh-keys/ > /dev/null 2>&1
+}
+
+
 downloadPass() {
   aws s3 sync ${KOPS_STATE_STORE}/dashboards-password/$K8S_CLUSTER_NAME.pass ./ > /dev/null 2>&1
 }
@@ -101,7 +106,7 @@ create() {
   if [ ! -f ~/.ssh/kops.pub ]; then
     ssh-keygen -t rsa -b 4096 -f ~/.ssh/kops -q -P ""
   fi
-  downloadKeys
+  uploadKeys
   kops create secret --name ${K8S_CLUSTER_NAME} sshpublickey admin -i ~/.ssh/kops.pub
   kops update cluster ${K8S_CLUSTER_NAME} --yes
 
