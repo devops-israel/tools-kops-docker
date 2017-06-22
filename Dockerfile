@@ -31,6 +31,10 @@ RUN curl https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}-li
     && mv /tmp/linux-amd64/helm /usr/bin \
     && chmod +x /usr/bin/helm
 
+RUN curl https://raw.githubusercontent.com/Comcast/k8sh/master/k8sh \
+    -o /usr/bin/k8sh \
+    && chmod +x /usr/bin/k8sh
+
 #install python and dependencies
 RUN apk add --update --no-cache python \
     && python -m ensurepip \
