@@ -36,7 +36,7 @@ RUN apk add --update --no-cache python \
     && python -m ensurepip \
     && rm -r /usr/lib/python*/ensurepip \
     && pip install --upgrade pip setuptools \
-    awscli --ignore-installed \
+    awscli kube-shell --ignore-installed \
     && rm -r /root/.cache
 
 RUN curl -s -L -o /usr/bin/templater https://raw.githubusercontent.com/johanhaleby/bash-templater/master/templater.sh \
