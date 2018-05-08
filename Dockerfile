@@ -1,8 +1,8 @@
 FROM alpine:3.5
 LABEL maintainer="Devops Israel - <info@devops.co.il"
 
-ENV KUBECTL_VERSION 1.7.4
-ENV KOPS_VERSION 1.7.0
+ENV KUBECTL_VERSION 1.9.0
+ENV KOPS_VERSION 1.9.0
 ENV HELM_VERSION 2.6.0
 
 #install kubectl
