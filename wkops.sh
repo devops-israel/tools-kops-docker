@@ -138,8 +138,8 @@ teardown() {
 }
 
 #addons versions
-export DASHBOARD_VERSION=1.6.0
-export MONITORING_VERSION=1.3.0
+export DASHBOARD_VERSION=1.8.1
+export MONITORING_VERSION=1.7.0
 
 #FIRST: check sanity
 kops version >/dev/null || fatal 'The `kops` CLI tool is not available.'
