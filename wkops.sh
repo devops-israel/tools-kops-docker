@@ -110,10 +110,10 @@ create() {
   kops create secret --name ${K8S_CLUSTER_NAME} sshpublickey admin -i ~/.ssh/kops.pub
   kops update cluster ${K8S_CLUSTER_NAME} --yes
 
-  OUTPUT=''
-  while [ -z "$OUTPUT" ]; do
-    OUTPUT=`curl -s --insecure https://api.${K8S_CLUSTER_NAME}`
-    if [ "$OUTPUT" == "Unauthorized" ]
+  STATUS_CODE="000"
+  while [ "$STATUS_CODE" == "000" ]; do
+    STATUS_CODE=`curl -s -o /dev/null -w "%{http_code}" --insecure https://api.${K8S_CLUSTER_NAME}`
+    if [ "$STATUS_CODE" == "401" ]
     then
       installSecrets
       installIngresses
@@ -123,7 +123,7 @@ create() {
       buildDashboard
       helm init --kube-context $K8S_CLUSTER_NAME
     else
-      echo "Cluster is not ready yet" && sleep 45
+      echo "Cluster is not ready yet... ( https://api.${K8S_CLUSTER_NAME} curl status code: $STATUS_CODE ) " && sleep 45
     fi
   done
 }
