@@ -42,7 +42,7 @@ RUN apk add --update --no-cache python \
 RUN curl -s -L -o /usr/bin/templater https://raw.githubusercontent.com/johanhaleby/bash-templater/master/templater.sh \
     && chmod +x /usr/bin/templater
 
-RUN curl -s -L -o /usr/bin/aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/darwin/amd64/aws-iam-authenticator \
+RUN curl -s -L -o /usr/bin/aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator \
     && chmod +x /usr/bin/aws-iam-authenticator
 
 RUN curl https://raw.githubusercontent.com/Comcast/k8sh/master/k8sh \
