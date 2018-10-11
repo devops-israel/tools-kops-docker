@@ -1,9 +1,9 @@
 FROM alpine:3.5
 LABEL maintainer="Devops Israel - <info@devops.co.il"
 
-ENV KUBECTL_VERSION 1.9.0
-ENV KOPS_VERSION 1.9.0
-ENV HELM_VERSION 2.6.0
+ENV KUBECTL_VERSION 1.10.0
+ENV KOPS_VERSION 1.10.0
+ENV HELM_VERSION 2.10.0
 
 #install kubectl
 RUN apk add --update \
@@ -49,5 +49,6 @@ RUN curl https://raw.githubusercontent.com/Comcast/k8sh/master/k8sh \
 
 WORKDIR /opt
 COPY wkops.sh /usr/bin/wkops
+COPY eks.sh /usr/bin/eks
 
 CMD ["bash"]
