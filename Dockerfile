@@ -1,7 +1,7 @@
 FROM alpine:3.5
 LABEL maintainer="Devops Israel - <info@devops.co.il"
 
-ENV KUBECTL_VERSION 1.10.0
+ENV KUBECTL_VERSION 1.11.1
 ENV KOPS_VERSION 1.10.0
 ENV HELM_VERSION 2.10.0
 
@@ -12,6 +12,7 @@ RUN apk add --update \
     vim \
     tar \
     sed \
+    git \
     bash \
     bash-doc \
     bash-completion \
@@ -29,7 +30,9 @@ RUN curl https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}-li
     -o /usr/bin/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
     && tar xvzf /usr/bin/helm-v${HELM_VERSION}-linux-amd64.tar.gz -C /tmp/ \
     && mv /tmp/linux-amd64/helm /usr/bin \
-    && chmod +x /usr/bin/helm
+    && chmod +x /usr/bin/helm \
+    && helm init --client-only \
+    && helm plugin install https://github.com/chartmuseum/helm-push
 
 #install python and dependencies
 RUN apk add --update --no-cache python \
