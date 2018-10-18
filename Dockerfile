@@ -14,6 +14,7 @@ RUN apk add --update \
     sed \
     git \
     bash \
+    wget \
     bash-doc \
     bash-completion \
     util-linux pciutils usbutils coreutils binutils findutils grep \
@@ -32,7 +33,11 @@ RUN curl https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}-li
     && mv /tmp/linux-amd64/helm /usr/bin \
     && chmod +x /usr/bin/helm \
     && helm init --client-only \
-    && helm plugin install https://github.com/chartmuseum/helm-push
+    && helm plugin install https://github.com/chartmuseum/helm-push \
+    && helm plugin install https://github.com/databus23/helm-diff --version master \
+    && helm plugin install https://github.com/adamreese/helm-env \
+    && helm plugin install https://github.com/adamreese/helm-last \
+    && helm plugin install https://github.com/ContainerSolutions/helm-monitor
 
 #install python and dependencies
 RUN apk add --update --no-cache python \
