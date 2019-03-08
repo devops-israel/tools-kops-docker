@@ -3,7 +3,7 @@ LABEL maintainer="Devops Israel - <info@devops.co.il"
 
 ENV KUBECTL_VERSION 1.11.1
 ENV KOPS_VERSION 1.10.0
-ENV HELM_VERSION 2.10.0
+ENV HELM_VERSION 2.13.0
 
 #install kubectl
 RUN apk add --update \
